@@ -1,0 +1,10 @@
+unit s
+mktable gpt
+mkpart primary fat32 2048 204799
+mkpart primary ntfs 204800 -2049
+set 1 boot on
+set 1 esp on
+set 2 msftdata on
+name 1 EFI
+name 2 Windows
+quit
