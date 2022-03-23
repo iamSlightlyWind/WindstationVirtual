@@ -18,3 +18,4 @@ sudo parted /dev/md0 < parted.script
 
 echo "######Final touch"
 sudo mkfs.msdos -F 32 -n EFI /dev/md0p1
+sudo chown $USER:$USER /dev/md0
