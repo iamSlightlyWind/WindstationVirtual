@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-WIN=/dev/sdb1
+WIN=/dev/sda2
 EFIDIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
 
 set -e
