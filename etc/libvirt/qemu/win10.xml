@@ -19,6 +19,9 @@
     <vcpupin vcpu="5" cpuset="9"/>
     <vcpupin vcpu="6" cpuset="10"/>
     <vcpupin vcpu="7" cpuset="11"/>
+    <emulatorpin cpuset="0-3"/>
+    <iothreadpin iothread="1" cpuset="0-1"/>
+    <iothreadpin iothread="2" cpuset="2-3"/>
   </cputune>
   <os>
     <type arch="x86_64" machine="pc-q35-6.2">hvm</type>
