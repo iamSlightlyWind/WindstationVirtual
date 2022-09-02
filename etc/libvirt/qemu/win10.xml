@@ -8,6 +8,10 @@
   </metadata>
   <memory unit="KiB">10485760</memory>
   <currentMemory unit="KiB">10485760</currentMemory>
+  <memoryBacking>
+    <source type="memfd"/>
+    <access mode="shared"/>
+  </memoryBacking>
   <vcpu placement="static">8</vcpu>
   <iothreads>2</iothreads>
   <cputune>
@@ -75,13 +79,6 @@
   </pm>
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
-    <disk type="file" device="cdrom">
-      <driver name="qemu" type="raw"/>
-      <source file="/media/slightlywind/Shared/Tools/virtio-win-0.1.221.iso"/>
-      <target dev="sdb" bus="sata"/>
-      <readonly/>
-      <address type="drive" controller="0" bus="0" target="0" unit="1"/>
-    </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15">
       <address type="pci" domain="0x0000" bus="0x02" slot="0x00" function="0x0"/>
     </controller>
@@ -171,10 +168,16 @@
     <controller type="virtio-serial" index="0">
       <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
     </controller>
+    <filesystem type="mount" accessmode="passthrough">
+      <driver type="virtiofs"/>
+      <source dir="/media/slightlywind/Shared"/>
+      <target dir="Shared"/>
+      <address type="pci" domain="0x0000" bus="0x08" slot="0x00" function="0x0"/>
+    </filesystem>
     <interface type="network">
       <mac address="52:54:00:ed:dd:61"/>
       <source network="default"/>
-      <model type="e1000e"/>
+      <model type="virtio"/>
       <address type="pci" domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
     </interface>
     <serial type="pty">
@@ -227,6 +230,13 @@
         <product id="0x55aa"/>
       </source>
       <address type="usb" bus="0" port="1"/>
+    </hostdev>
+    <hostdev mode="subsystem" type="usb" managed="yes">
+      <source>
+        <vendor id="0x2dc8"/>
+        <product id="0x2101"/>
+      </source>
+      <address type="usb" bus="0" port="4"/>
     </hostdev>
     <redirdev bus="usb" type="spicevmc">
       <address type="usb" bus="0" port="2"/>
