@@ -191,6 +191,9 @@
     </channel>
     <input type="mouse" bus="ps2"/>
     <input type="keyboard" bus="ps2"/>
+    <input type="keyboard" bus="virtio">
+      <address type="pci" domain="0x0000" bus="0x04" slot="0x00" function="0x0"/>
+    </input>
     <tpm model="tpm-crb">
       <backend type="emulator" version="2.0"/>
     </tpm>
@@ -204,8 +207,7 @@
     </sound>
     <audio id="1" type="spice"/>
     <video>
-      <model type="qxl" ram="65536" vram="65536" vgamem="16384" heads="1" primary="yes"/>
-      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x0"/>
+      <model type="none"/>
     </video>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
@@ -233,6 +235,11 @@
       <address type="usb" bus="0" port="3"/>
     </redirdev>
     <memballoon model="none"/>
+    <shmem name="looking-glass">
+      <model type="ivshmem-plain"/>
+      <size unit="M">32</size>
+      <address type="pci" domain="0x0000" bus="0x10" slot="0x01" function="0x0"/>
+    </shmem>
   </devices>
   <qemu:commandline>
     <qemu:arg value="-acpitable"/>
