@@ -12,15 +12,19 @@
     <source type="memfd"/>
     <access mode="shared"/>
   </memoryBacking>
-  <vcpu placement="static">4</vcpu>
+  <vcpu placement="static">8</vcpu>
   <iothreads>1</iothreads>
   <cputune>
     <vcpupin vcpu="0" cpuset="4"/>
     <vcpupin vcpu="1" cpuset="5"/>
     <vcpupin vcpu="2" cpuset="6"/>
     <vcpupin vcpu="3" cpuset="7"/>
-    <emulatorpin cpuset="4"/>
-    <iothreadpin iothread="1" cpuset="4"/>
+    <vcpupin vcpu="4" cpuset="8"/>
+    <vcpupin vcpu="5" cpuset="9"/>
+    <vcpupin vcpu="6" cpuset="10"/>
+    <vcpupin vcpu="7" cpuset="11"/>
+    <emulatorpin cpuset="2,3"/>
+    <iothreadpin iothread="1" cpuset="2,3"/>
   </cputune>
   <os>
     <type arch="x86_64" machine="pc-q35-6.2">hvm</type>
