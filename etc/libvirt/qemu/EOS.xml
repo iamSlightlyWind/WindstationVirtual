@@ -1,4 +1,4 @@
-<domain xmlns:qemu="http://libvirt.org/schemas/domain/qemu/1.0" type="kvm">
+<domain type="kvm">
   <name>win10</name>
   <uuid>8efc8307-c3ac-4e54-9509-fa0c64caa088</uuid>
   <metadata>
@@ -6,27 +6,30 @@
       <libosinfo:os id="http://microsoft.com/win/10"/>
     </libosinfo:libosinfo>
   </metadata>
-  <memory unit="KiB">10485760</memory>
-  <currentMemory unit="KiB">10485760</currentMemory>
+  <memory unit="KiB">8388608</memory>
+  <currentMemory unit="KiB">8388608</currentMemory>
   <memoryBacking>
     <source type="memfd"/>
     <access mode="shared"/>
   </memoryBacking>
-  <vcpu placement="static">4</vcpu>
+  <vcpu placement="static">8</vcpu>
   <iothreads>1</iothreads>
   <cputune>
-    <vcpupin vcpu="0" cpuset="4"/>
-    <vcpupin vcpu="1" cpuset="5"/>
-    <vcpupin vcpu="2" cpuset="6"/>
-    <vcpupin vcpu="3" cpuset="7"/>
-    <emulatorpin cpuset="4"/>
-    <iothreadpin iothread="1" cpuset="4"/>
+    <vcpupin vcpu="0" cpuset="0"/>
+    <vcpupin vcpu="1" cpuset="1"/>
+    <vcpupin vcpu="2" cpuset="2"/>
+    <vcpupin vcpu="3" cpuset="3"/>
+    <vcpupin vcpu="4" cpuset="4"/>
+    <vcpupin vcpu="5" cpuset="5"/>
+    <vcpupin vcpu="6" cpuset="6"/>
+    <vcpupin vcpu="7" cpuset="7"/>
+    <emulatorpin cpuset="0-1"/>
+    <iothreadpin iothread="1" cpuset="2-3"/>
   </cputune>
   <os>
     <type arch="x86_64" machine="pc-q35-6.2">hvm</type>
     <loader readonly="yes" type="pflash">/usr/share/edk2-ovmf/x64/OVMF_CODE.fd</loader>
     <nvram>/var/lib/libvirt/qemu/nvram/win10_VARS.fd</nvram>
-    <boot dev="hd"/>
   </os>
   <features>
     <acpi/>
@@ -57,6 +60,7 @@
     <topology sockets="1" dies="1" cores="4" threads="2"/>
     <cache mode="passthrough"/>
     <feature policy="require" name="topoext"/>
+    <feature policy="disable" name="hypervisor"/>
   </cpu>
   <clock offset="localtime">
     <timer name="rtc" tickpolicy="catchup"/>
@@ -74,6 +78,13 @@
   </pm>
   <devices>
     <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type="block" device="disk">
+      <driver name="qemu" type="raw" cache="directsync" io="native"/>
+      <source dev="/dev/md0"/>
+      <target dev="sda" bus="sata"/>
+      <boot order="2"/>
+      <address type="drive" controller="0" bus="0" target="0" unit="0"/>
+    </disk>
     <controller type="usb" index="0" model="qemu-xhci" ports="15">
       <address type="pci" domain="0x0000" bus="0x02" slot="0x00" function="0x0"/>
     </controller>
@@ -163,40 +174,23 @@
     <controller type="virtio-serial" index="0">
       <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
     </controller>
-    <filesystem type="mount" accessmode="passthrough">
-      <driver type="virtiofs"/>
-      <source dir="/media/slightlywind/Shared"/>
-      <target dir="Shared"/>
-      <address type="pci" domain="0x0000" bus="0x08" slot="0x00" function="0x0"/>
-    </filesystem>
     <interface type="network">
-      <mac address="52:54:00:ed:dd:61"/>
+      <mac address="52:54:00:04:8b:b9"/>
       <source network="default"/>
       <model type="virtio"/>
       <address type="pci" domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
     </interface>
-    <serial type="pty">
-      <target type="isa-serial" port="0">
-        <model name="isa-serial"/>
-      </target>
-    </serial>
-    <console type="pty">
-      <target type="serial" port="0"/>
-    </console>
     <channel type="spicevmc">
       <target type="virtio" name="com.redhat.spice.0"/>
       <address type="virtio-serial" controller="0" bus="0" port="1"/>
     </channel>
     <input type="mouse" bus="ps2"/>
     <input type="keyboard" bus="ps2"/>
-    <input type="keyboard" bus="virtio">
-      <address type="pci" domain="0x0000" bus="0x04" slot="0x00" function="0x0"/>
-    </input>
-    <tpm model="tpm-crb">
+    <tpm model="tpm-tis">
       <backend type="emulator" version="2.0"/>
     </tpm>
-    <graphics type="spice" autoport="yes" listen="127.0.0.1">
-      <listen type="address" address="127.0.0.1"/>
+    <graphics type="spice" autoport="yes" listen="0.0.0.0">
+      <listen type="address" address="0.0.0.0"/>
       <image compression="off"/>
       <gl enable="no"/>
     </graphics>
@@ -205,39 +199,18 @@
     </sound>
     <audio id="1" type="spice"/>
     <video>
-      <model type="none"/>
+      <model type="qxl" ram="65536" vram="65536" vgamem="16384" heads="1" primary="yes"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x0"/>
     </video>
-    <hostdev mode="subsystem" type="pci" managed="yes">
-      <source>
-        <address domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
-      </source>
-      <address type="pci" domain="0x0000" bus="0x05" slot="0x00" function="0x0"/>
-    </hostdev>
-    <hostdev mode="subsystem" type="pci" managed="yes">
-      <source>
-        <address domain="0x0000" bus="0x01" slot="0x00" function="0x1"/>
-      </source>
-      <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
-    </hostdev>
     <hostdev mode="subsystem" type="usb" managed="yes">
       <source>
-        <vendor id="0x174c"/>
-        <product id="0x55aa"/>
+        <vendor id="0x30c9"/>
+        <product id="0x000e"/>
       </source>
       <address type="usb" bus="0" port="1"/>
     </hostdev>
-    <hostdev mode="subsystem" type="usb" managed="yes">
-      <source>
-        <vendor id="0x2dc8"/>
-        <product id="0x2101"/>
-      </source>
-      <address type="usb" bus="0" port="4"/>
-    </hostdev>
     <redirdev bus="usb" type="spicevmc">
       <address type="usb" bus="0" port="2"/>
-    </redirdev>
-    <redirdev bus="usb" type="spicevmc">
-      <address type="usb" bus="0" port="3"/>
     </redirdev>
     <memballoon model="none"/>
     <shmem name="looking-glass">
@@ -246,8 +219,4 @@
       <address type="pci" domain="0x0000" bus="0x10" slot="0x01" function="0x0"/>
     </shmem>
   </devices>
-  <qemu:commandline>
-    <qemu:arg value="-acpitable"/>
-    <qemu:arg value="file=/usr/share/vgabios/SSDT1.dat"/>
-  </qemu:commandline>
 </domain>
