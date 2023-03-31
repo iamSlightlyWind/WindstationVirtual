@@ -1,2 +1,5 @@
 efi1
 efi2
+*.exe
+*.img
+*.iso
