@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-WIN=/dev/sda2
-EFIDIR=$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)
+WIN=/dev/nvme0n1p4
+EFIDIR=/home/slightlywind/Repositories/WindstationVirtual
 
 set -e
 
@@ -21,4 +21,4 @@ LOOP2=$(losetup -f)
 losetup ${LOOP2} "${EFIDIR}/efi2"
 mdadm --build --verbose /dev/md0 --chunk=512 --level=linear --raid-devices=3 ${LOOP1} ${WIN} ${LOOP2}
 chown $USER:disk /dev/md0
-echo "$LOOP1 $LOOP2" > ~/.win10-loop-devices
+echo "$LOOP1 $LOOP2" >~/.win10-loop-devices

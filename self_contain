@@ -1,9 +1,0 @@
-<feature policy="disable" name="hypervisor"/>
-
-diskpart
-DISKPART> list disk
-DISKPART> select disk 0    # Select the disk
-DISKPART> list volume      # Find EFI volume (partition) number
-DISKPART> select volume 2  # Select EFI volume
-DISKPART> assign letter=B  # Assign B: to EFI volume
-DISKPART> exit
