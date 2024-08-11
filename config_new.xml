@@ -199,7 +199,7 @@
     </devices>
     <qemu:commandline>
       <qemu:arg value="-acpitable"/>
-      <qemu:arg value="file=/home/slightlywind/Repositories/GPU-Passthrough-Manager/SSDT1.dat"/>
+      <qemu:arg value="file=/home/slightlywind/Repositories/WindstationVirtual/SSDT1.dat"/>
     </qemu:commandline>
   </domain>
   
