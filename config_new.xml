@@ -6,8 +6,8 @@
       <libosinfo:os id="http://microsoft.com/win/10"/>
     </libosinfo:libosinfo>
   </metadata>
-  <memory unit="KiB">8290304</memory>
-  <currentMemory unit="KiB">8290304</currentMemory>
+  <memory unit="KiB">20971520</memory>
+  <currentMemory unit="KiB">16777216</currentMemory>
   <vcpu placement="static">8</vcpu>
   <sysinfo type="smbios">
     <system>
@@ -40,7 +40,7 @@
       <runtime state="on"/>
       <synic state="on"/>
       <stimer state="on"/>
-      <vendor_id state="on" value="whatever"/>
+      <vendor_id state="on" value="HP"/>
       <frequencies state="on"/>
       <tlbflush state="on"/>
       <ipi state="on"/>
@@ -155,7 +155,16 @@
     </interface>
     <input type="mouse" bus="ps2"/>
     <input type="keyboard" bus="ps2"/>
+    <graphics type="spice">
+      <listen type="none"/>
+      <image compression="off"/>
+      <gl enable="no"/>
+    </graphics>
     <audio id="1" type="none"/>
+    <video>
+      <model type="qxl" ram="65536" vram="65536" vgamem="16384" heads="1" primary="yes"/>
+      <address type="pci" domain="0x0000" bus="0x00" slot="0x01" function="0x0"/>
+    </video>
     <hostdev mode="subsystem" type="pci" managed="yes">
       <source>
         <address domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
@@ -174,6 +183,15 @@
       </source>
       <address type="pci" domain="0x0000" bus="0x06" slot="0x00" function="0x0"/>
     </hostdev>
+    <redirdev bus="usb" type="spicevmc">
+      <address type="usb" bus="0" port="1"/>
+    </redirdev>
+    <redirdev bus="usb" type="spicevmc">
+      <address type="usb" bus="0" port="2"/>
+    </redirdev>
+    <redirdev bus="usb" type="spicevmc">
+      <address type="usb" bus="0" port="3"/>
+    </redirdev>
     <watchdog model="itco" action="reset"/>
     <memballoon model="virtio">
       <address type="pci" domain="0x0000" bus="0x03" slot="0x00" function="0x0"/>
